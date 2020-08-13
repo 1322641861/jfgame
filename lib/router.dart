@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
  * 比如注册时每次下一次都用替换路由，则返回时会直接返回首页
  * Navigator.pushReplacementNamed('/home');
  * 2.返回根
- * Navigator.pushAndRemoveUntil(
+ * Navigator.pushAndRemoveUntil(context,
  *  new MaterialPageRoute(builder: (context) => new Tabs(index: 1)), // 控制tabs下标，默认为0
  *  (route) => route == null
  * );

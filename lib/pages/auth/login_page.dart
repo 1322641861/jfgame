@@ -61,8 +61,6 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final screenWidth = ScreenUtils.screenW(context);
     final screenHeight = ScreenUtils.screenH(context);
-    print(
-        'ScreenUtils.screenW(context)------${ScreenUtils.screenW(context) * 0.7}');
     return Container(
       width: num.parse((screenWidth * 0.8).toStringAsFixed(2)),
       height: num.parse((screenHeight * 0.8).toStringAsFixed(2)),
