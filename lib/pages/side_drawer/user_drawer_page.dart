@@ -81,7 +81,7 @@ class _UsersDrawerState extends State<UsersDrawer> {
                     items: this.bottomItems,
                     currentIndex: this._currentIndex,
                     type: BottomNavigationBarType.fixed,
-                    fixedColor: Colors.blue,
+                    fixedColor: Theme.of(context).accentColor,
                     onTap: (int index) {
                       setState(() {});
                       this._currentIndex = index;

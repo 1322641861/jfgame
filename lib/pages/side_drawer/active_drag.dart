@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jfgame/util/screen_utils.dart';
 import './title_bar_head.dart';
 import '../../widgets/user_dialog.dart';
+import '../../util/theme_color_utils.dart';
 
 /// 右侧展示
 class ActiveRightDrag extends StatefulWidget {
@@ -27,7 +28,6 @@ class _ActiveRightDragState extends State<ActiveRightDrag>
   @override
   void initState() {
     super.initState();
-    print('${this.balanceData['dateList'].length}');
     _tabController = new TabController(
         vsync: this, length: this.balanceData['dateList'].length);
     this.listData = [
@@ -137,65 +137,67 @@ class _ActiveRightDragState extends State<ActiveRightDrag>
         controller: this._tabController,
         children: <Widget>[
           Container(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                    padding: EdgeInsets.all(15),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                      padding: EdgeInsets.all(15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          this._columnMoneyMsg(),
+                          SizedBox(
+                            height: 30,
+                            width: 1,
+                            child: Container(
+                              color: Colors.blue,
+                            ),
+                          ),
+                          this._columnMoneyMsg('红利金额', 'makeMoney'),
+                          SizedBox(
+                            height: 30,
+                            width: 1,
+                            child: Container(
+                              color: Colors.blue,
+                            ),
+                          ),
+                          this._columnMoneyMsg('提现投注金额', 'bettingMoney'),
+                        ],
+                      )),
+                  Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        this._columnMoneyMsg(),
-                        SizedBox(
-                          height: 30,
-                          width: 1,
-                          child: Container(
-                            color: Colors.blue,
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            children: <Widget>[
+                              Text(
+                                '活动时间',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                              Text(
+                                '${balanceData['startTime']}至${balanceData['endTime']}',
+                              ),
+                            ],
                           ),
                         ),
-                        this._columnMoneyMsg('红利金额', 'makeMoney'),
-                        SizedBox(
-                          height: 30,
-                          width: 1,
-                          child: Container(
-                            color: Colors.blue,
+                        RaisedButton(
+                          color: Colors.blue,
+                          child: Text(
+                            '申领',
+                            style: TextStyle(color: Colors.white),
                           ),
-                        ),
-                        this._columnMoneyMsg('提现投注金额', 'bettingMoney'),
+                          onPressed: () {
+                            print('申领');
+                          },
+                        )
                       ],
-                    )),
-                Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Column(
-                          children: <Widget>[
-                            Text(
-                              '活动时间',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            Text(
-                              '${balanceData['startTime']}至${balanceData['endTime']}',
-                            ),
-                          ],
-                        ),
-                      ),
-                      RaisedButton(
-                        color: Colors.blue,
-                        child: Text(
-                          '申领',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        onPressed: () {
-                          print('申领');
-                        },
-                      )
-                    ],
-                  ),
-                )
-              ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ],
@@ -264,7 +266,8 @@ class _ActiveLeftDragState extends State<ActiveLeftDrag> {
           children: <Widget>[
             this._colunmBtnWgList(this._leftBtnList[0], '_status'),
             Divider(
-              color: Color(0xff4199fd),
+              // color: Color(0xff4199fd),
+              color: Theme.of(context).accentColor,
               height: 4,
             ),
             this._colunmBtnWgList(this._leftBtnList[1], '_species'),
@@ -280,18 +283,19 @@ class _ActiveLeftDragState extends State<ActiveLeftDrag> {
         return RaisedButton(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
-              side: BorderSide(width: 1, color: Color(0xffbfdcfe))),
+              side: BorderSide(
+                  width: 1,
+                  // color: Color(0xffbfdcfe)
+                  color: ThemeColorChange().lightSelectAccentColor(context))),
           child: Text(f['name']),
-          color: this.requestParams[type] == f['value']
-              ? Colors.blue
-              : Color(0xfff0f7ff),
-          textColor: this.requestParams[type] == f['value']
-              ? Colors.white
-              : Color(0xff495269),
+          // textColor: this.requestParams[type] == f['value']
+          //     ? Colors.white
+          //     : Color(0xff495269),
+          color: ThemeColorChange().selectedWithAccentColor(
+              this.requestParams[type] == f['value'], context),
           onPressed: () {
             setState(() {});
             this.requestParams[type] = f['value'];
-            print('requestParams---------${this.requestParams}');
           },
         );
       }).toList(),

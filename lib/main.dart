@@ -12,20 +12,32 @@ import './generated/l10n.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
+import 'package:flutter_i18n/flutter_i18n.dart';
+import 'package:flutter_i18n/flutter_i18n_delegate.dart';
+
 void main() async {
   Provider.debugCheckInvalidValueType = null;
+  final FlutterI18nDelegate flutterI18nDelegate = FlutterI18nDelegate(
+    translationLoader: FileTranslationLoader(
+        useCountryCode: false,
+        fallbackFile: 'zh',
+        basePath: 'assets/i18n',
+        forcedLocale: Locale('es')),
+  );
+
   WidgetsFlutterBinding.ensureInitialized();
+  await flutterI18nDelegate.load(null);
   await StorageManager.init();
-  runApp(MyApp());
+  runApp(MyApp(flutterI18nDelegate));
   // 横屏
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
     DeviceOrientation.landscapeLeft,
   ]);
   // Android状态栏透明 splash为白色,所以调整状态栏文字为黑色
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarBrightness: Brightness.light));
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  //     statusBarColor: Colors.transparent,
+  //     statusBarBrightness: Brightness.light));
 }
 
 // void targetPlatformType() {
@@ -33,7 +45,11 @@ void main() async {
 // }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+  final FlutterI18nDelegate flutterI18nDelegate;
+  const MyApp(
+    this.flutterI18nDelegate, {
+    Key key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -61,18 +77,19 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             // initialRoute: '/',
             // onGenerateRoute: onGenerateRoute, // 路由传值
-            // theme: ThemeData(backgroundColor: Colors.blue),
             theme: themeModel.themeData(),
             debugShowCheckedModeBanner: false,
             darkTheme: themeModel.themeData(platformDarkMode: true),
-            locale: localeModel.locale,
             localizationsDelegates: [
               S.delegate, //支持语种对应的字段
+              flutterI18nDelegate,
               GlobalCupertinoLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate
             ],
-            supportedLocales: S.delegate.supportedLocales, //支持的语种
+            // locale: localeModel.locale, // 默认加载的语种
+            // supportedLocales: S.delegate.supportedLocales, //支持的语种
+            builder: FlutterI18n.rootAppBuilder(),
             home: Scaffold(
                 resizeToAvoidBottomPadding: false, // 防止键盘弹出遮挡界面或改变布局
                 body: StartupPage()

@@ -1,0 +1,14 @@
+{
+    "topDrawerTexts":{
+        "tab1":"资金密码",
+        "tab2":"账号密码",
+        "tab3":"设置",
+        "lightPattern":"白昼模式",
+        "dartPattern":"黑夜模式",
+        "themeColor":"主题颜色",
+        "language":"语言"
+    },
+    "tabTitle":{
+        "tzrecord": "投注记录"
+    }
+}

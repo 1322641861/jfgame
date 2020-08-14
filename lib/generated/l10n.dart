@@ -10,18 +10,18 @@ import 'intl/messages_all.dart';
 
 class S {
   S(this.localeName);
-  
-  static const AppLocalizationDelegate delegate =
-    AppLocalizationDelegate();
+
+  static const AppLocalizationDelegate delegate = AppLocalizationDelegate();
 
   static Future<S> load(Locale locale) {
-    final String name = locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
+    final String name =
+        locale.countryCode.isEmpty ? locale.languageCode : locale.toString();
     final String localeName = Intl.canonicalizedLocale(name);
     return initializeMessages(localeName).then((_) {
       Intl.defaultLocale = localeName;
       return S(localeName);
     });
-  } 
+  }
 
   static S of(BuildContext context) {
     return Localizations.of<S>(context, S);
@@ -40,7 +40,7 @@ class S {
 
   String get autoBySystem {
     return Intl.message(
-      'Auto',
+      '自动',
       name: 'autoBySystem',
       desc: '',
       args: [],
@@ -49,7 +49,7 @@ class S {
 
   String get theme {
     return Intl.message(
-      'Theme',
+      '主题颜色',
       name: 'theme',
       desc: '',
       args: [],
@@ -58,7 +58,7 @@ class S {
 
   String get settingLanguage {
     return Intl.message(
-      'Language',
+      '语言',
       name: 'settingLanguage',
       desc: '',
       args: [],
@@ -67,7 +67,7 @@ class S {
 
   String get darkMode {
     return Intl.message(
-      'Dark Mode',
+      '模式选择',
       name: 'darkMode',
       desc: '',
       args: [],
@@ -76,7 +76,7 @@ class S {
 
   String get language {
     return Intl.message(
-      'Language',
+      '语言',
       name: 'language',
       desc: '',
       args: [],
@@ -107,7 +107,8 @@ class AppLocalizationDelegate extends LocalizationsDelegate<S> {
 
   List<Locale> get supportedLocales {
     return const <Locale>[
-      Locale('zh', ''), Locale('en', ''),
+      Locale('zh', 'CH'), // 语言，国家
+      Locale('en', 'US'),
     ];
   }
 

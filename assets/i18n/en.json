@@ -1,0 +1,14 @@
+{
+    "topDrawerTexts":{
+        "tab1":"money password",
+        "tab2":"account password",
+        "tab3":"set",
+        "lightPattern":"day mode",
+        "dartPattern":"night mode",
+        "themeColor":"theme colors",
+        "language":"language"
+    },
+    "tabTitle":{
+        "tzrecord": "betting record"
+    }
+}

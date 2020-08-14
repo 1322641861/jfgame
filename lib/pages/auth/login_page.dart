@@ -5,6 +5,7 @@ import 'package:jfgame/pages/auth/register_page.dart';
 import '../container_tab.dart';
 import '../../util/screen_utils.dart';
 import '../../widgets/loading.dart';
+import '../../util/theme_color_utils.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key key}) : super(key: key);
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
       height: num.parse((screenHeight * 0.8).toStringAsFixed(2)),
       padding: EdgeInsets.fromLTRB(80, 0, 80, 0),
       // alignment: Alignment.center,
-      color: Colors.white,
+      color: ThemeColorChange().bgColorWithDark(context),
       child: Scaffold(
         // resizeToAvoidBottomPadding: false, // 不允许修改键盘影响布局
         body: SingleChildScrollView(
@@ -88,9 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       'welcome',
                       style: TextStyle(
-                        fontSize: 32,
-                        color: Colors.blue,
-                      ),
+                          fontSize: 32, color: Theme.of(context).accentColor),
                     ),
                   ),
                   Container(

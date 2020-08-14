@@ -14,26 +14,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Text('Home'),
-          RaisedButton(
-              child: Text('登陆'),
-              onPressed: () {
-                // Navigator.pushNamed(context, '/login');
-                Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return LoginPage();
-                }));
-              }),
-          RaisedButton(
-              child: Text('底部弹框'),
-              onPressed: () {
-                // bottomSheetDrawer(context);
-              }),
-        ],
-      )),
+          alignment: Alignment.center,
+          width: ScreenUtils.screenW(context) * .5,
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('Home'),
+              RaisedButton(
+                  child: Text('登陆'),
+                  onPressed: () {
+                    // Navigator.pushNamed(context, '/login');
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return LoginPage();
+                    }));
+                  }),
+              RaisedButton(
+                  child: Text('底部弹框'),
+                  onPressed: () {
+                    // bottomSheetDrawer(context);
+                  }),
+            ],
+          )),
     );
   }
 }

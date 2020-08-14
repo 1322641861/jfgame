@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import '../config/storage_manage.dart';
 import '../generated/l10n.dart';
 
@@ -13,6 +14,7 @@ class LocaleModel extends ChangeNotifier {
 
   int get localeIndex => _localeIndex;
 
+  /// 初始化语言类型
   Locale get locale {
     if (_localeIndex > 0) {
       var value = localeValueList[_localeIndex].split("-");
@@ -22,20 +24,29 @@ class LocaleModel extends ChangeNotifier {
     return null;
   }
 
+  // changeLange(BuildContext context, Locale currentLang) async {
+  //   // currentLang =
+  //   //     currentLang.languageCode == 'en' ? Locale('it') : Locale('en');
+  //   currentLang = LocaleModel().locale;
+  //   await FlutterI18n.refresh(context, currentLang);
+  // }
+
+  /// 读取存储选择的语言类型index，用于初始化语言类型
   LocaleModel() {
     _localeIndex = StorageManager.sharedPreferences.getInt(kLocaleIndex) ?? 0;
   }
 
+  /// 存储选择的语言类型index
   switchLocale(int index) {
     _localeIndex = index;
-    notifyListeners();
+    notifyListeners(); // 监听改变状态
     StorageManager.sharedPreferences.setInt(kLocaleIndex, index);
   }
 
   static String localeName(index, context) {
     switch (index) {
       case 0:
-        return S.of(context).autoBySystem;
+        return '自动';
       case 1:
         return '中文';
       case 2:

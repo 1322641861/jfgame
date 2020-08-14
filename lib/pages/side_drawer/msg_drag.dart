@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import './title_bar_head.dart';
-import 'package:oktoast/oktoast.dart';
+import '../../util/theme_color_utils.dart';
 
 class MsgRightDrag extends StatefulWidget {
   MsgRightDrag({Key key, this.data}) : super(key: key);
@@ -15,10 +15,24 @@ class _MsgRightDragState extends State<MsgRightDrag> {
     {'msg': '2019尖峰参展亚博会靓影', 'date': '2020-05-07', 'id': 2},
     {'msg': '2019尖峰参展亚博会靓影', 'date': '2020-05-07', 'id': 3},
   ];
-
+  ScrollController _scrollController = new ScrollController();
   @override
   void initState() {
     super.initState();
+    // this._scrollController.addListener(() {
+    //   if (_scrollController.position.pixels ==
+    //       _scrollController.position.maxScrollExtent) {
+    //     Future.delayed(Duration(seconds: 1), () {
+    //       print('刷新成功');
+    //       setState(() {});
+    //       this.noticeList.add({
+    //         'msg': '新增${this.noticeList.length + 2}',
+    //         'date': '2020-05-07',
+    //         'id': this.noticeList.length + 2,
+    //       });
+    //     });
+    //   }
+    // });
   }
 
   @override
@@ -65,7 +79,9 @@ class _MsgRightDragState extends State<MsgRightDrag> {
     return index != 8
         ? Container(
             margin: EdgeInsets.only(top: 8),
-            color: Color(0xfff0f7ff),
+            // color: Color(0xfff0f7ff),
+            color: ThemeColorChange()
+                .customBrightness(context, Color(0xfff0f7ff), Colors.black45),
             child: ListTile(
               title: Text(this.noticeList[index]['msg']),
               subtitle: Text(this.noticeList[index]['date']),
@@ -158,18 +174,15 @@ class _MsgLeftDragState extends State<MsgLeftDrag> {
         return RaisedButton(
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
-              side: BorderSide(width: 1, color: Color(0xffbfdcfe))),
+              side: BorderSide(
+                  width: 1,
+                  color: ThemeColorChange().lightSelectAccentColor(context))),
           child: Text(f['name']),
-          color: this.requestParams[type] == f['value']
-              ? Colors.blue
-              : Color(0xfff0f7ff),
-          textColor: this.requestParams[type] == f['value']
-              ? Colors.white
-              : Color(0xff495269),
+          color: ThemeColorChange().selectedWithAccentColor(
+              this.requestParams[type] == f['value'], context),
           onPressed: () {
             setState(() {});
             this.requestParams[type] = f['value'];
-            print('requestParams---------${this.requestParams}');
           },
         );
       }).toList(),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jfgame/pages/container_drawer/chat_page.dart';
-import 'package:jfgame/pages/container_drawer/figure_page.dart';
-import 'package:jfgame/pages/container_drawer/hall_page.dart';
-import 'package:jfgame/pages/container_drawer/lottery_page.dart';
-import 'package:jfgame/pages/home/home.dart';
+import 'container_drawer/chat_page.dart';
+import 'container_drawer/figure_page.dart';
+import 'container_drawer/hall_page.dart';
+import 'container_drawer/lottery_page.dart';
+import 'home/home.dart';
 import './side_drawer/top_drawer.dart';
 import './side_drawer/user_drawer_page.dart';
 import 'package:jfgame/util/screen_utils.dart';
@@ -50,6 +50,7 @@ class _ContainerTabState extends State<ContainerTab> {
       bottomBattingDrawer, // 投注记录
       bottomLotteryDrawer, // 开奖记录
       bottomChatDrawer, // 聊天
+      // BottomChatDrawer(),
       bottomFigureDrawer, // 路子图
       bottomHallDrawer, // 彩票大厅
     ];
@@ -97,7 +98,7 @@ class _ContainerTabState extends State<ContainerTab> {
           currentIndex: 2,
           iconSize: 25.0,
           type: BottomNavigationBarType.fixed, // 设置底部可以撑开多个按钮
-          fixedColor: Colors.blue, // 选中的颜色
+          fixedColor: Theme.of(context).accentColor, // 选中的颜色
           onTap: (int index) {
             this.bottomDrager[index](context);
             setState(() {

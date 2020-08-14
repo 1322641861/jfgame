@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:jfgame/pages/auth/login_page.dart';
 import 'package:jfgame/util/screen_utils.dart';
 import 'package:oktoast/oktoast.dart';
@@ -7,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../provider/theme_model.dart';
 import '../../generated/l10n.dart';
 import '../../provider/locale_model.dart';
+import '../../util/theme_color_utils.dart';
 
 class TopDrawer extends StatefulWidget {
   TopDrawer({Key key, this.title, this.exit = false}) : super(key: key);
@@ -27,6 +29,7 @@ class _TopDrawerState extends State<TopDrawer>
   TextEditingController _pwdController = new TextEditingController();
   bool _keyBoardOpen = false;
   bool _isPassword = false;
+  Locale currentLang;
 
   @override
   void initState() {
@@ -44,6 +47,13 @@ class _TopDrawerState extends State<TopDrawer>
     super.initState();
     // 注册键盘事件
     WidgetsBinding.instance.addObserver(this);
+    Future.delayed(Duration.zero, () async {
+      // 本地记录的语言类型
+      setState(() {
+        this.currentLang = FlutterI18n.currentLocale(context);
+        print('currentLang-------${currentLang}');
+      });
+    });
   }
 
   /// 监听键盘
@@ -73,124 +83,133 @@ class _TopDrawerState extends State<TopDrawer>
         child: Container(
           height: ScreenUtils.screenH(context),
           color: Colors.transparent,
-          child: Stack(
-            children: <Widget>[
-              // appbar蒙层背景色
-              Positioned(
-                  top: 0,
-                  left: 0,
-                  child: Container(
-                    width: ScreenUtils.screenW(context),
-                    height: 56,
-                    color: Colors.white,
-                  )),
-              // 下拉抽屉内容区
-              Scaffold(
-                  backgroundColor: Colors.transparent,
-                  appBar: AppBar(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(28),
-                          bottomRight: Radius.circular(28)),
+          child: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: Stack(
+              children: <Widget>[
+                // appbar蒙层背景色
+                Positioned(
+                    top: 0,
+                    left: 0,
+                    child: Container(
+                      width: ScreenUtils.screenW(context),
+                      height: 56,
+                      color: ThemeColorChange().bgColorWithDark(context),
+                    )),
+                // 下拉抽屉内容区
+                Scaffold(
+                    backgroundColor: Colors.transparent,
+                    appBar: AppBar(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(28),
+                            bottomRight: Radius.circular(28)),
+                      ),
+                      title: Text('您好，${widget.title}'),
+                      leading: IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                      // actions: <Widget>[
+                      //   IconButton(
+                      //       icon: Icon(Icons.menu),
+                      //       onPressed: () {
+                      //         Navigator.push(context,
+                      //             MaterialPageRoute(builder: (context) {
+                      //           return UserDrawer();
+                      //         }));
+                      //       })
+                      // ],
                     ),
-                    title: Text('您好，${widget.title}'),
-                    leading: IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }),
-                    // actions: <Widget>[
-                    //   IconButton(
-                    //       icon: Icon(Icons.menu),
-                    //       onPressed: () {
-                    //         Navigator.push(context,
-                    //             MaterialPageRoute(builder: (context) {
-                    //           return UserDrawer();
-                    //         }));
-                    //       })
-                    // ],
-                  ),
-                  body: Container(
-                    padding: EdgeInsets.only(top: 8, bottom: 8),
-                    height: scaffoldH,
-                    width: ScreenUtils.screenW(context),
-                    decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      // color: Theme.of(context).primaryColor,
-                    ),
-                    child: Column(
-                      children: <Widget>[
-                        // tab按钮
-                        Center(
-                          child: !this._keyBoardOpen
-                              ? Container(
-                                  width: ScreenUtils.screenW(context) * 0.7,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      _settingsRaisedButton(
-                                          Icon(Icons.home), 0, '资金密码', () {
-                                        setState(() {
-                                          this._tabIndex = 0;
-                                        });
-                                      }),
-                                      _settingsRaisedButton(
-                                          Icon(Icons.lock), 1, '账号密码', () {
-                                        setState(() {
-                                          this._tabIndex = 1;
-                                        });
-                                      }),
-                                      _settingsRaisedButton(
-                                          Icon(Icons.settings), 2, '设置', () {
-                                        setState(() {
-                                          this._tabIndex = 2;
-                                        });
-                                      }),
-                                    ],
+                    body: Container(
+                      padding: EdgeInsets.only(top: 8, bottom: 8),
+                      height: scaffoldH,
+                      width: ScreenUtils.screenW(context),
+                      decoration: BoxDecoration(
+                        color: ThemeColorChange().bgColorWithDark(context),
+                      ),
+                      child: Column(
+                        children: <Widget>[
+                          // tab按钮
+                          Center(
+                            child: !this._keyBoardOpen
+                                ? Container(
+                                    width: ScreenUtils.screenW(context) * 0.7,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        _settingsRaisedButton(Icon(Icons.home),
+                                            0, 'topDrawerTexts.tab1', () {
+                                          setState(() {
+                                            this._tabIndex = 0;
+                                          });
+                                        }),
+                                        _settingsRaisedButton(Icon(Icons.lock),
+                                            1, "topDrawerTexts.tab2", () {
+                                          setState(() {
+                                            this._tabIndex = 1;
+                                          });
+                                        }),
+                                        _settingsRaisedButton(
+                                            Icon(Icons.settings),
+                                            2,
+                                            'topDrawerTexts.tab3', () {
+                                          setState(() {
+                                            this._tabIndex = 2;
+                                          });
+                                        }),
+                                      ],
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          !this._keyBoardOpen
+                              ? Padding(
+                                  padding: EdgeInsets.only(top: 13),
+                                  child: Divider(
+                                    // color: Colors.blue,
+                                    color: Theme.of(context).accentColor,
+                                    height: 2,
                                   ),
                                 )
-                              : null,
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 13),
-                          child: Divider(
-                            color: Colors.blue,
-                            height: 2,
+                              : Text(''),
+                          // tab展示区域；可滑动 + Expanded最大适应 =》 防止超出范围
+                          Expanded(
+                            child: CustomScrollView(
+                              shrinkWrap: true,
+                              slivers: <Widget>[
+                                SliverList(
+                                    delegate: SliverChildListDelegate(<Widget>[
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                        left: 30, top: 10, right: 30),
+                                    child: this._tabSelect(),
+                                  ),
+                                ]))
+                              ],
+                            ),
                           ),
-                        ),
-                        // tab展示区域；可滑动 + Expanded最大适应 =》 防止超出范围
-                        Expanded(
-                          child: CustomScrollView(
-                            shrinkWrap: true,
-                            slivers: <Widget>[
-                              SliverList(
-                                  delegate: SliverChildListDelegate(<Widget>[
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      left: 30, top: 10, right: 30),
-                                  child: this._tabSelect(),
-                                ),
-                              ]))
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )),
-              // 底部蒙层点击收起下拉抽屉
-              Positioned(
-                bottom: 0,
-                width: ScreenUtils.screenW(context),
-                height: ScreenUtils.screenH(context) - scaffoldH - 80,
-                child: FlatButton(
-                    // color: Colors.blue,
-                    onPressed: () {
-                  controller.reverse(); // 反向播放
-                  Navigator.pop(context);
-                }),
-              ),
-            ],
+                        ],
+                      ),
+                    )),
+                // 底部蒙层点击收起下拉抽屉
+                Positioned(
+                  bottom: 0,
+                  width: ScreenUtils.screenW(context),
+                  height: ScreenUtils.screenH(context) - scaffoldH - 80,
+                  child: FlatButton(
+                      // color: Colors.blue,
+                      onPressed: () {
+                    controller.reverse(); // 反向播放
+                    Navigator.pop(context);
+                  }),
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -368,7 +387,7 @@ class _TopDrawerState extends State<TopDrawer>
             SizedBox(
               height: 8,
             ),
-            LanguageWidget(),
+            LanguageWidget(this.currentLang),
             SizedBox(
               height: 8,
             ),
@@ -402,10 +421,15 @@ class _TopDrawerState extends State<TopDrawer>
       [String title, Function onPressed]) {
     return RaisedButton(
         padding: EdgeInsets.only(top: 4, bottom: 4),
-        color: Colors.white,
-        textColor: this._tabSelectedColorIndex == index
-            ? Theme.of(context).accentColor
-            : Colors.black,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(6),
+            side: BorderSide(
+              width: 1,
+              color: ThemeColorChange().lightSelectAccentColor(context),
+            )),
+        color: ThemeColorChange().selectedWithAccentColor(
+            this._tabSelectedColorIndex == index, context),
+        textColor: ThemeColorChange().bgColorWithDark(context, true),
         child: title != null
             ? Column(
                 children: <Widget>[
@@ -413,7 +437,8 @@ class _TopDrawerState extends State<TopDrawer>
                   SizedBox(
                     height: 5,
                   ),
-                  Text('${title}')
+                  Text(FlutterI18n.translate(context, title))
+                  // Text('${title}')
                 ],
               )
             : Column(
@@ -476,12 +501,8 @@ class ColorThemeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ExpansionTile(
       // title: Text(S.of(context).theme),
-      title:
-          Text('主题颜色', style: TextStyle(color: Theme.of(context).accentColor)),
-      leading: Icon(
-        Icons.color_lens,
-        color: Theme.of(context).accentColor,
-      ),
+      title: ThemeColorChange().text('主题颜色', context),
+      leading: ThemeColorChange().icon(Icons.color_lens, context),
       children: <Widget>[
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -532,33 +553,37 @@ class ColorThemeWidget extends StatelessWidget {
 
 /// 语言选择
 class LanguageWidget extends StatelessWidget {
+  final Locale currentLang;
+  LanguageWidget(this.currentLang);
+  // 改变并刷新语言
+  changeLange(BuildContext context, Locale currentLang) async {
+    // currentLang =
+    //     currentLang.languageCode == 'en' ? Locale('it') : Locale('en');
+    currentLang = LocaleModel().locale;
+    await FlutterI18n.refresh(context, currentLang);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            S.of(context).settingLanguage,
-            style: TextStyle(),
-          ),
-          Text(
-            LocaleModel.localeName(
-                Provider.of<LocaleModel>(context).localeIndex, context),
-            style: Theme.of(context).textTheme.caption,
-          )
+          ThemeColorChange().text('自动', context),
+          ThemeColorChange().text(
+              LocaleModel.localeName(
+                  Provider.of<LocaleModel>(context).localeIndex, context),
+              context),
         ],
       ),
-      leading: Icon(
-        Icons.public,
-        color: Theme.of(context).accentColor,
-      ),
+      leading: ThemeColorChange().icon(Icons.public, context),
       children: LocaleModel.localeValueList.asMap().keys.map((key) {
         var model = Provider.of<LocaleModel>(context);
         return RadioListTile(
           value: key,
           onChanged: (index) {
             model.switchLocale(index);
+            this.changeLange(context, this.currentLang);
           },
           groupValue: model.localeIndex,
           title: Text(LocaleModel.localeName(key, context)),
